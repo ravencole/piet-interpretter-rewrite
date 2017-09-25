@@ -8,29 +8,34 @@ export default class Roll{
 			const [ DEPTH, ROLLS ] = this.stack.pop(2),
 			      WORK_AREA = this.stack.pop(DEPTH)
 
-			if (ROLLS >= 0) {
-				for (let i = 0; i < ROLLS; i++) {
-					const r = WORK_AREA.pop()
+			const RES = ROLLS >= 0 ? 
+				this.rollForwards(ROLLS, WORK_AREA) : 
+				this.rollBackwards(ROLLS, WORK_AREA)
 
-					WORK_AREA.unshift(r)
-				}
-			} else {
-				for (let i = 0; i < ROLLS; i++) {
-					const r = WORK_AREA.shift()
-
-					WORK_AREA.push(r)
-				}
-			}
-
-
-			this.stack.push(WORK_AREA)
+			this.stack.push(RES)
 		}
 
 		return null
 	}
 
-	rollForwards(rolls, workArea) {
+	rollBackwards(rolls, workArea) {
+		for (let i = 0; i < rolls; i++) {
+			const r = workArea.shift()
 
+			workArea.push(r)
+		}
+
+		return workArea
+	}
+
+	rollForwards(rolls, workArea) {
+		for (let i = 0; i < rolls; i++) {
+			const r = workArea.pop()
+
+			workArea.unshift(r)
+		}
+
+		return workArea
 	}
 
 	validate() {
